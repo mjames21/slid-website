@@ -1,49 +1,57 @@
-<div class="flex items-start justify-between gap-4 flex-wrap">
-  <div class="min-w-0">
-    <h1 class="text-2xl md:text-3xl font-semibold">{{name}}</h1>
-    <p class="mt-2 text-sm text-zinc-600">{{mandate}}</p>
-  </div>
+<!-- ======================================================
+FILE: resources/views/department_show.html
+====================================================== -->
 
-  <div class="flex gap-2">
-    <a class="rounded-xl border px-4 py-2 text-sm hover:bg-zinc-50" href="/departments">Back to Departments</a>
-  </div>
-</div>
-
-{{#has_units}}
-  <section class="mt-7">
-    <h2 class="text-lg font-semibold text-zinc-900">Units</h2>
-    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-5">
-      {{#units}}
-        <div class="rounded-2xl border bg-white p-6">
-          <div class="text-base font-semibold text-zinc-900">{{name}}</div>
-          {{#description}}
-            <p class="mt-2 text-sm text-zinc-700">{{description}}</p>
-          {{/description}}
+<section class="mt-4 sm:mt-6">
+  <div class="rounded-2xl overflow-hidden border border-slborder bg-gradient-to-r from-slgreendeep to-slgreen text-white">
+    <div class="p-4 sm:p-6 md:p-8">
+      <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div class="min-w-0">
+          <div class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] sm:text-xs font-extrabold tracking-wide border border-white/20 bg-white/10">
+            Department
+          </div>
+          <h1 class="mt-3 text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight">{{name}}</h1>
+          <p class="mt-3 text-sm sm:text-base text-white/85 max-w-3xl leading-6 sm:leading-7">{{mandate}}</p>
         </div>
-      {{/units}}
-    </div>
-  </section>
-{{/has_units}}
 
-{{#has_functions}}
-  <section class="mt-7">
-    <h2 class="text-lg font-semibold text-zinc-900">Core functions</h2>
-    <div class="mt-4 rounded-2xl border bg-white p-6">
-      <ul class="space-y-2 text-sm text-zinc-700">
+        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          <a class="rounded-xl border border-white/25 bg-white/10 px-4 py-3 text-sm font-extrabold text-white hover:bg-white/15 text-center" href="/departments">
+            Back to Departments
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mt-8">
+  {{#has_functions}}
+    <section class="rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6">
+      <h2 class="text-lg font-semibold text-zinc-900">Core functions</h2>
+      <p class="mt-1 text-sm text-zinc-600">Key responsibilities of this office or directorate.</p>
+
+      <ul class="mt-4 space-y-3 text-sm text-zinc-700">
         {{#functions}}
-          <li class="flex gap-2"><span class="text-slp-primary">•</span><span>{{.}}</span></li>
+          <li class="flex items-start gap-3">
+            <span class="mt-1 text-slp-primary font-extrabold">•</span>
+            <span class="leading-6">{{.}}</span>
+          </li>
         {{/functions}}
       </ul>
+    </section>
+  {{/has_functions}}
+
+  <section class="mt-8 rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6">
+    <h2 class="text-lg font-semibold text-zinc-900">Online services</h2>
+    <p class="mt-1 text-sm text-zinc-600">Use official portals for applications and permits.</p>
+
+    <div class="mt-4 flex flex-col sm:flex-row flex-wrap gap-3">
+      <a class="rounded-xl bg-slp-primary text-white px-4 py-3 text-sm font-semibold hover:opacity-90 text-center" href="{{evisa_url}}" target="_blank" rel="noopener">
+        Apply eVisa
+      </a>
+      <a class="rounded-xl border border-zinc-200 px-4 py-3 text-sm font-semibold hover:bg-zinc-50 text-center" href="{{permit_url}}" target="_blank" rel="noopener">
+        Unified Permit Portal
+      </a>
     </div>
   </section>
-{{/has_functions}}
-
-<section class="mt-8 rounded-2xl border bg-white p-6">
-  <h2 class="text-lg font-semibold text-zinc-900">Online services</h2>
-  <p class="mt-1 text-sm text-zinc-600">Use official portals for applications and permits.</p>
-
-  <div class="mt-4 flex flex-wrap gap-3">
-    <a class="rounded-xl bg-slp-primary text-white px-4 py-2 text-sm hover:opacity-90" href="{{evisa_url}}" target="_blank" rel="noopener">Apply eVisa</a>
-    <a class="rounded-xl border px-4 py-2 text-sm hover:bg-zinc-50" href="{{permit_url}}" target="_blank" rel="noopener">Unified Permit Portal</a>
-  </div>
 </section>
