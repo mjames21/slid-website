@@ -1,0 +1,63 @@
+<!-- ======================================================
+FILE: resources/views/track.html
+====================================================== -->
+
+<main id="main" class="py-10">
+  <section class="container mx-auto px-4">
+    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">{{heading}}</h1>
+    <p class="mt-3 text-slate-600 text-lg leading-relaxed">{{subheading}}</p>
+
+    <div class="mt-8 grid lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-7 rounded-2xl border border-slate-200 bg-white p-6">
+        <form method="get" action="/track">
+          <label class="block text-sm font-semibold text-slate-800" for="ref">Reference Number</label>
+          <input
+            id="ref"
+            name="ref"
+            value="{{ref}}"
+            placeholder="e.g., SLID-2026-000123"
+            class="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#005028]"
+          />
+
+          <button type="submit" class="mt-4 inline-flex items-center justify-center rounded-full bg-[#005028] px-6 py-3 text-white font-semibold hover:opacity-95">
+            Check Status
+          </button>
+        </form>
+
+        {{#has_ref}}
+          <div class="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <div class="text-sm font-bold text-slate-900">Status</div>
+            <p class="mt-1 text-sm text-slate-700">
+              Tracking is not yet connected to a backend in this starter build.
+              Provide your tracking API endpoint and I’ll wire this to return live results.
+            </p>
+          </div>
+        {{/has_ref}}
+      </div>
+
+      <aside class="lg:col-span-5 rounded-2xl border border-slate-200 bg-white p-6">
+        <div class="text-sm font-bold text-slate-900">Need help?</div>
+        <p class="mt-2 text-sm text-slate-600">If you cannot find your reference number, contact support.</p>
+        <div class="mt-4 rounded-xl bg-[#05331F] p-4 text-white">
+          <div class="text-xs text-white/70">Hotline</div>
+          <div class="text-2xl font-extrabold">{{emergency_number}}</div>
+        </div>
+
+        <div class="mt-4 grid gap-3">
+          <a href="{{passport_url}}" class="rounded-xl border border-slate-200 p-4 hover:bg-slate-50">
+            <div class="text-sm font-semibold text-[#05331F]">Passport Online</div>
+            <div class="mt-1 text-xs text-slate-600">Buy voucher & apply</div>
+          </a>
+          <a href="{{evisa_portal_url}}" target="_blank" rel="noopener" class="rounded-xl border border-slate-200 p-4 hover:bg-slate-50">
+            <div class="text-sm font-semibold text-[#05331F]">Apply for eVisa</div>
+            <div class="mt-1 text-xs text-slate-600">Official eVisa portal</div>
+          </a>
+          <a href="{{unified_permit_url}}" target="_blank" rel="noopener" class="rounded-xl border border-slate-200 p-4 hover:bg-slate-50">
+            <div class="text-sm font-semibold text-[#05331F]">Visa & Permits Portal</div>
+            <div class="mt-1 text-xs text-slate-600">Unified Permit platform</div>
+          </a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>

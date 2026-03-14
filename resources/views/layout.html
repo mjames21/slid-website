@@ -1,0 +1,367 @@
+<!-- ======================================================
+FILE: resources/views/layout.html
+====================================================== -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{{page_title}} · {{site_title}}</title>
+    <link rel="icon" type="image/png" href="/assets/slid-logo.png" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              slgreen: "#005028",
+              slgreendeep: "#05331F",
+              slink: "#0F172A",
+              slmuted: "#475569",
+              slborder: "rgba(15, 23, 42, .10)",
+            },
+            boxShadow: {
+              gov: "0 14px 34px rgba(2,6,23,.08)"
+            },
+            borderRadius: {
+              gov: "16px"
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+      .container { max-width: 1280px; }
+      .dd-bridge { padding-top: .75rem; }
+      .dd-open { display: block !important; }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      @media (max-width: 1023px) {
+        .mobile-nav-scroll {
+          max-height: calc(100vh - 140px);
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="bg-slate-50 text-slate-900 antialiased">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-3 focus:py-2 focus:ring-2 focus:ring-[#005028]"
+    >
+      Skip to content
+    </a>
+
+    <div class="h-1 bg-[#005028]"></div>
+
+    <!-- Top utility bar -->
+    <div class="bg-[#05331F] text-white">
+      <div class="container mx-auto px-3 sm:px-4 py-2.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div class="text-sm font-extrabold leading-tight">
+          Emergency:
+          <span class="text-[#22c55e]">{{emergency_number}}</span>
+        </div>
+
+        <div class="flex flex-col xs:flex-row sm:flex-row flex-wrap items-stretch sm:items-center gap-2 w-full sm:w-auto">
+          <a
+            href="/faq"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center rounded-full bg-white/10 px-4 py-2 text-xs font-extrabold hover:bg-white/15 border border-white/15 w-full sm:w-auto"
+          >
+           FAQ →
+          </a>
+
+          <a
+            href="{{webmail_url}}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center rounded-full bg-white/10 px-4 py-2 text-xs font-extrabold hover:bg-white/15 border border-white/15 w-full sm:w-auto"
+          >
+            Webmail →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200">
+      <div class="container mx-auto px-3 sm:px-4 min-h-[72px] sm:h-20 flex items-center justify-between gap-3">
+        <a href="/" class="min-w-0 flex items-center gap-3">
+          <img
+            src="/assets/slid-logo.png"
+            alt="Sierra Leone Immigration Logo"
+            class="h-10 w-10 sm:h-11 sm:w-11 rounded-full border border-[#005028]/50 object-cover shrink-0"
+          />
+          <div class="leading-tight min-w-0">
+            <div class="text-sm sm:text-base font-extrabold tracking-wide text-[#05331F] truncate">
+              {{site_title}}
+            </div>
+            <div class="hidden sm:block text-xs text-slate-500 truncate">
+              Serving with Integrity • Protecting Lives & Property
+            </div>
+            <div class="sm:hidden text-[11px] text-slate-500 truncate">
+              Serving with Integrity
+            </div>
+          </div>
+        </a>
+
+        <!-- Desktop nav -->
+        <nav class="hidden lg:flex items-center gap-2">
+          {{#nav}}
+            {{#has_children}}
+              <div class="relative group" data-dd>
+                <a
+                  href="{{href}}"
+                  class="px-3 py-1.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-sm inline-flex items-center gap-1 text-[#05331F] font-semibold"
+                  data-dd-trigger
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  {{label}}
+                  <svg class="h-4 w-4 text-slate-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/>
+                  </svg>
+                </a>
+
+                <div class="dd-bridge absolute left-0 top-full z-50 hidden group-hover:block" data-dd-wrap>
+                  <div
+                    class="w-[min(720px,calc(100vw-2rem))] rounded-2xl border border-slate-200 bg-white shadow-xl p-4"
+                    data-dd-panel
+                  >
+                    <div class="grid gap-4 {{mega_cols_class}}">
+                      {{#groups}}
+                        <div class="min-w-0">
+                          {{#heading}}
+                            <div class="text-xs font-extrabold uppercase tracking-wide text-slate-500 px-2">{{heading}}</div>
+                          {{/heading}}
+
+                          <div class="mt-2 space-y-1">
+                            {{#links}}
+                              <a
+                                href="{{href}}"
+                                class="block rounded-xl px-3 py-2 text-sm text-slate-800 hover:bg-slate-50"
+                                {{#external}}target="_blank" rel="noopener noreferrer"{{/external}}
+                              >{{label}}</a>
+                            {{/links}}
+                          </div>
+                        </div>
+                      {{/groups}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {{/has_children}}
+
+            {{^has_children}}
+              <a
+                class="px-3 py-1.5 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-sm text-[#05331F] font-semibold"
+                href="{{href}}"
+                {{#external}}target="_blank" rel="noopener noreferrer"{{/external}}
+              >
+                {{label}}
+              </a>
+            {{/has_children}}
+          {{/nav}}
+        </nav>
+
+        <!-- Mobile toggle -->
+        <button
+          id="mobileMenuBtn"
+          class="lg:hidden inline-flex items-center justify-center w-11 h-11 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 shadow-sm shrink-0"
+          type="button"
+          aria-expanded="false"
+          aria-controls="mobileNav"
+        >
+          <span class="sr-only">Open menu</span>
+
+          <svg id="menuIconOpen" class="h-6 w-6 text-[#05331F]" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+
+          <svg id="menuIconClose" class="hidden h-6 w-6 text-[#05331F]" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l12 12M18 6l-12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile nav -->
+      <div id="mobileNav" class="lg:hidden hidden border-t border-slate-200 bg-white">
+        <div class="container mx-auto px-3 sm:px-4 py-3 mobile-nav-scroll">
+          <div class="space-y-2">
+            {{#nav}}
+              {{#has_children}}
+                <details class="rounded-2xl border border-slate-200 bg-white overflow-hidden">
+                  <summary class="cursor-pointer list-none px-4 py-3 font-semibold text-[#05331F] flex items-center justify-between">
+                    <span>{{label}}</span>
+                    <span class="text-slate-400 text-sm">+</span>
+                  </summary>
+
+                  <div class="px-3 pb-3">
+                    <div class="space-y-3">
+                      {{#groups}}
+                        <div class="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                          {{#heading}}
+                            <div class="text-[11px] font-extrabold uppercase tracking-wide text-slate-500">{{heading}}</div>
+                          {{/heading}}
+
+                          <div class="mt-2 space-y-1">
+                            {{#links}}
+                              <a
+                                href="{{href}}"
+                                class="block rounded-xl px-3 py-2 text-sm text-slate-800 hover:bg-white"
+                                {{#external}}target="_blank" rel="noopener noreferrer"{{/external}}
+                              >{{label}}</a>
+                            {{/links}}
+                          </div>
+                        </div>
+                      {{/groups}}
+                    </div>
+                  </div>
+                </details>
+              {{/has_children}}
+
+              {{^has_children}}
+                <a
+                  href="{{href}}"
+                  class="block rounded-2xl border border-slate-200 bg-white px-4 py-3 font-semibold text-[#05331F] hover:bg-slate-50"
+                  {{#external}}target="_blank" rel="noopener noreferrer"{{/external}}
+                >{{label}}</a>
+              {{/has_children}}
+            {{/nav}}
+
+            <div class="pt-2 grid gap-2 sm:hidden">
+              <a
+                href="{{gps_tracker_url}}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center rounded-2xl bg-[#05331F] px-4 py-3 text-sm font-extrabold text-white hover:bg-[#042919]"
+              >
+                GPS Tracker →
+              </a>
+              <a
+                href="{{webmail_url}}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-extrabold text-[#05331F] hover:bg-slate-50"
+              >
+                Webmail →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" class="container mx-auto px-3 sm:px-4 py-4 sm:py-6">
+      {{{content}}}
+    </main>
+
+    <footer class="mt-10 md:mt-12 bg-[#05331F] text-white">
+      <div class="h-1 bg-[#005028]"></div>
+
+      <div class="container mx-auto px-3 sm:px-4 py-8 sm:py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div class="flex items-center gap-3 min-w-0">
+          <img
+            src="/assets/slid-logo.png"
+            alt="Sierra Leone Immigration Logo"
+            class="h-10 w-10 rounded-full border border-[#005028]/50 object-cover shrink-0"
+          />
+          <div class="min-w-0">
+            <div class="font-extrabold truncate">{{site_title}}</div>
+            <div class="text-xs opacity-80">© <span id="year"></span> All rights reserved.</div>
+          </div>
+        </div>
+
+        <div class="text-sm opacity-90">
+          Emergency: <strong class="text-[#22c55e]">{{emergency_number}}</strong>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      (() => {
+        const y = document.getElementById("year");
+        if (y) y.textContent = String(new Date().getFullYear());
+
+        // Mobile menu
+        const btn = document.getElementById("mobileMenuBtn");
+        const nav = document.getElementById("mobileNav");
+        const openIcon = document.getElementById("menuIconOpen");
+        const closeIcon = document.getElementById("menuIconClose");
+
+        if (btn && nav) {
+          btn.addEventListener("click", () => {
+            const isHidden = nav.classList.contains("hidden");
+            nav.classList.toggle("hidden");
+            btn.setAttribute("aria-expanded", String(isHidden));
+
+            if (openIcon && closeIcon) {
+              openIcon.classList.toggle("hidden", isHidden);
+              closeIcon.classList.toggle("hidden", !isHidden);
+            }
+          });
+        }
+
+        // Desktop dropdowns
+        const dropdowns = Array.from(document.querySelectorAll("[data-dd]"));
+
+        const closeAll = (except = null) => {
+          dropdowns.forEach((dd) => {
+            if (except && dd === except) return;
+            const wrap = dd.querySelector("[data-dd-wrap]");
+            const trigger = dd.querySelector("[data-dd-trigger]");
+            if (wrap) wrap.classList.remove("dd-open");
+            if (trigger) trigger.setAttribute("aria-expanded", "false");
+          });
+        };
+
+        dropdowns.forEach((dd) => {
+          const trigger = dd.querySelector("[data-dd-trigger]");
+          const wrap = dd.querySelector("[data-dd-wrap]");
+          if (!trigger || !wrap) return;
+
+          trigger.addEventListener("click", (e) => {
+            e.preventDefault();
+            const isOpen = wrap.classList.contains("dd-open");
+            closeAll(dd);
+            if (!isOpen) {
+              wrap.classList.add("dd-open");
+              trigger.setAttribute("aria-expanded", "true");
+            } else {
+              wrap.classList.remove("dd-open");
+              trigger.setAttribute("aria-expanded", "false");
+            }
+          });
+        });
+
+        document.addEventListener("click", (e) => {
+          const target = e.target;
+          if (!(target instanceof Element)) return;
+          if (!target.closest("[data-dd]")) closeAll();
+        });
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") {
+            closeAll();
+            if (btn && nav && !nav.classList.contains("hidden")) {
+              nav.classList.add("hidden");
+              btn.setAttribute("aria-expanded", "false");
+              if (openIcon && closeIcon) {
+                openIcon.classList.remove("hidden");
+                closeIcon.classList.add("hidden");
+              }
+            }
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

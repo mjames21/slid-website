@@ -1,0 +1,85 @@
+<!-- ======================================================
+FILE: resources/views/passport.html
+====================================================== -->
+
+<main id="main" class="py-10">
+  <section class="container mx-auto px-4">
+    <div class="grid lg:grid-cols-12 gap-8 items-start">
+      <div class="lg:col-span-7">
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">{{heading}}</h1>
+        <p class="mt-3 text-slate-600 text-lg leading-relaxed">{{subheading}}</p>
+
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="{{voucher_url}}" class="inline-flex items-center justify-center rounded-full bg-[#005028] px-5 py-2.5 text-white font-semibold hover:opacity-95">
+            Buy Voucher
+          </a>
+          <a href="{{apply_url}}" class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 font-semibold text-[#05331F] hover:bg-slate-50">
+            Start Application
+          </a>
+          <a href="{{fees_url}}" class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-5 py-2.5 font-semibold text-slate-800 hover:bg-slate-100">
+            Fees & Charges
+          </a>
+        </div>
+
+        <div class="mt-10 grid sm:grid-cols-3 gap-4">
+          <div class="rounded-2xl border border-slate-200 bg-white p-5">
+            <div class="text-xs font-semibold tracking-wide text-slate-500">STEP 1</div>
+            <div class="mt-2 font-bold text-slate-900">Buy voucher</div>
+            <p class="mt-1 text-sm text-slate-600">Purchase through approved channels and keep your voucher code safe.</p>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-5">
+            <div class="text-xs font-semibold tracking-wide text-slate-500">STEP 2</div>
+            <div class="mt-2 font-bold text-slate-900">Apply online</div>
+            <p class="mt-1 text-sm text-slate-600">Complete the application form and upload the required documents.</p>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-white p-5">
+            <div class="text-xs font-semibold tracking-wide text-slate-500">STEP 3</div>
+            <div class="mt-2 font-bold text-slate-900">Book biometrics</div>
+            <p class="mt-1 text-sm text-slate-600">Select an appointment date/time for biometric capture and submission.</p>
+          </div>
+        </div>
+
+        <div class="mt-10 rounded-2xl border border-slate-200 bg-white p-6">
+          <h2 class="text-lg font-extrabold text-slate-900">Typical requirements</h2>
+          <ul class="mt-3 grid sm:grid-cols-2 gap-2 text-sm text-slate-700">
+            <li>Birth certificate / proof of citizenship</li>
+            <li>National ID / valid identification</li>
+            <li>Passport photo (as specified)</li>
+            <li>Supporting documents (as applicable)</li>
+          </ul>
+          <p class="mt-4 text-xs text-slate-500">
+            Requirements may vary by application type. Use official guidance and approved channels only.
+          </p>
+        </div>
+      </div>
+
+      <aside class="lg:col-span-5">
+        <div class="rounded-2xl border border-slate-200 bg-white p-6">
+          <div class="text-sm font-bold text-slate-900">Other online services</div>
+          <div class="mt-4 grid gap-3">
+            <a href="{{evisa_portal_url}}" target="_blank" rel="noopener" class="rounded-xl border border-slate-200 p-4 hover:bg-slate-50">
+              <div class="text-sm font-semibold text-[#05331F]">Apply for eVisa</div>
+              <div class="mt-1 text-xs text-slate-600">Official eVisa portal</div>
+            </a>
+            <a href="{{unified_permit_url}}" target="_blank" rel="noopener" class="rounded-xl border border-slate-200 p-4 hover:bg-slate-50">
+              <div class="text-sm font-semibold text-[#05331F]">Visa & Permits Portal</div>
+              <div class="mt-1 text-xs text-slate-600">Unified Permit platform</div>
+            </a>
+            <a href="{{track_url}}" class="rounded-xl border border-slate-200 p-4 hover:bg-slate-50">
+              <div class="text-sm font-semibold text-[#05331F]">Track Application</div>
+              <div class="mt-1 text-xs text-slate-600">Check application status</div>
+            </a>
+          </div>
+        </div>
+
+        <div class="mt-6 rounded-2xl bg-[#05331F] p-6 text-white">
+          <div class="text-sm font-semibold">Need help?</div>
+          <div class="mt-1 text-2xl font-extrabold">Call {{emergency_number}}</div>
+          <p class="mt-2 text-sm text-white/80">Use verified information only. Avoid unofficial agents.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>

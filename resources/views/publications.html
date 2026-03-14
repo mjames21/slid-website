@@ -1,0 +1,94 @@
+<!-- FILE: resources/views/publications.html -->
+
+<section class="mt-10">
+  <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+    <div>
+      <span class="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-wider px-2 py-1 rounded bg-[#05331F]/10 text-[#05331F]">
+        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10M7 11h10M7 15h6M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
+        </svg>
+        Publications
+      </span>
+      <h1 class="mt-3 text-2xl md:text-3xl font-semibold">{{page_title}}</h1>
+      <p class="mt-1 text-sm text-zinc-600">Reports, guidelines, and official publications.</p>
+    </div>
+
+    <form method="get" class="flex flex-wrap gap-3 items-end">
+      <label class="text-sm text-zinc-600">
+        Search
+        <input class="mt-1 w-64 max-w-full rounded-xl border px-3 py-2 bg-white"
+               type="text" name="q" value="{{q}}" placeholder="Search publications..." />
+      </label>
+
+      <label class="text-sm text-zinc-600">
+        Per page
+        <input class="mt-1 w-24 rounded-xl border px-3 py-2 bg-white"
+               type="text" name="per_page" value="{{per_page}}" />
+      </label>
+
+      <label class="text-sm text-zinc-600">
+        Tenant
+        <input class="mt-1 w-24 rounded-xl border px-3 py-2 bg-white"
+               type="text" name="tenant_id" value="{{tenant_id}}" />
+      </label>
+
+      <button class="rounded-xl bg-slp-primary text-white px-4 py-2 hover:opacity-90" type="submit">
+        Refresh
+      </button>
+    </form>
+  </div>
+
+  {{#error}}
+    <div class="mt-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-800">
+      {{error}}
+    </div>
+  {{/error}}
+
+  {{#has_items}}
+  <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {{#items}}
+    <article class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 hover:shadow-md hover:ring-gray-200 transition overflow-hidden">
+      <div class="p-5">
+        <h3 class="font-semibold leading-snug">
+          <a class="hover:underline" href="{{href}}">{{title}}</a>
+        </h3>
+
+        <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-600">
+          {{#date}}
+          <span class="inline-flex items-center gap-1">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M5 11h14M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/>
+            </svg>
+            {{date}}
+          </span>
+          {{/date}}
+          {{#type}}
+          <span class="h-1 w-1 rounded-full bg-zinc-300"></span>
+          <span class="inline-flex items-center rounded-full bg-zinc-100 px-2 py-0.5 font-medium text-zinc-700">
+            {{type}}
+          </span>
+          {{/type}}
+        </div>
+
+        <p class="mt-3 text-sm text-zinc-700">{{excerpt}}</p>
+
+        <div class="mt-4">
+          <a class="inline-flex items-center gap-2 text-sm font-semibold text-[#05331F] hover:underline" href="{{href}}">
+            Open
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </article>
+    {{/items}}
+  </div>
+  {{/has_items}}
+
+  {{^has_items}}
+    <div class="mt-10 rounded-2xl border bg-white p-6 text-zinc-700">
+      No publications found. Try adjusting your search.
+    </div>
+  {{/has_items}}
+</section>

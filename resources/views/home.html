@@ -1,0 +1,573 @@
+<!-- ======================================================
+FILE: resources/views/home.html
+====================================================== -->
+
+<style>
+  /* =========================
+     Core look
+     ========================= */
+  .slp-card { background:#fff; border:1px solid rgba(15,23,42,.10); border-radius:16px; }
+  .slp-soft { box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06); }
+  .slp-panel { background:#F7FAFF; border:1px solid rgba(15,23,42,.10); border-radius:16px; }
+
+  /* =========================
+     Slider
+     ========================= */
+  .slp-slide { opacity: 0; transition: opacity 500ms ease; }
+  .slp-slide.is-active { opacity: 1; }
+  .slp-dot{
+    width:10px;
+    height:10px;
+    border-radius:9999px;
+    background:rgba(255,255,255,.35);
+    border:1px solid rgba(255,255,255,.20);
+  }
+  .slp-dot.is-active{ background:#005028; }
+
+  /* =========================
+     Back-to-top
+     ========================= */
+  .slp-top{ opacity:0; pointer-events:none; transform:translateY(8px); transition:200ms ease; }
+  .slp-top.is-visible{ opacity:1; pointer-events:auto; transform:translateY(0); }
+
+  /* =========================
+     Clamp
+     ========================= */
+  .slp-clamp-2{
+    display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden;
+  }
+  .slp-clamp-3{
+    display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden;
+  }
+
+  /* =========================
+     Mobile niceties
+     ========================= */
+  @media (max-width: 639px) {
+    .slp-mobile-full > *{
+      width:100%;
+    }
+  }
+</style>
+
+<!-- HERO -->
+<section class="mt-4 md:mt-6">
+  <div class="slp-card slp-soft overflow-hidden">
+    <div id="heroSlider" class="relative h-[300px] sm:h-[360px] md:h-[480px] overflow-hidden">
+      {{#hero_slides}}
+        <div class="slp-slide absolute inset-0" data-slp-slide>
+          <img src="{{image}}" alt="{{title}}" class="h-full w-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-r from-[#05331F]/95 via-[#05331F]/65 to-[#05331F]/20"></div>
+
+          <div class="absolute inset-0">
+            <div class="h-full flex items-center px-4 sm:px-6 md:px-10">
+              <div class="max-w-2xl text-white">
+                <h1 class="text-2xl sm:text-3xl md:text-5xl font-extrabold leading-tight">
+                  {{title}}
+                </h1>
+
+                <p class="mt-3 md:mt-4 inline-block max-w-2xl rounded-2xl bg-[#05331F]/70 px-3 sm:px-4 py-3 text-white text-sm md:text-base leading-6 md:leading-7 backdrop-blur-sm border border-white/10">
+                  {{text}}
+                </p>
+
+                <div class="mt-5 md:mt-6 flex flex-col sm:flex-row flex-wrap gap-3 slp-mobile-full">
+                  <a href="{{cta1_href}}" class="inline-flex items-center justify-center rounded-xl bg-[#005028] px-5 py-3 text-sm font-extrabold text-white hover:bg-[#05331F]">
+                    {{cta1_label}}
+                  </a>
+                  <a href="{{cta2_href}}" class="inline-flex items-center justify-center rounded-xl border border-white/30 bg-white/10 px-5 py-3 text-sm font-extrabold text-white hover:bg-white/15">
+                    {{cta2_label}}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {{/hero_slides}}
+
+      <button type="button" data-slp-prev class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 rounded-xl border border-white/20 bg-white/10 p-2.5 sm:p-3 text-white hover:bg-white/20" aria-label="Previous slide">
+        <svg class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M12.79 15.77a.75.75 0 01-1.06-.02L7.21 11.1a.75.75 0 010-1.06l4.52-4.65a.75.75 0 111.08 1.04L8.83 10l3.98 3.69a.75.75 0 01-.02 1.08z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+
+      <button type="button" data-slp-next class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 rounded-xl border border-white/20 bg-white/10 p-2.5 sm:p-3 text-white hover:bg-white/20" aria-label="Next slide">
+        <svg class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M7.21 4.23a.75.75 0 011.06.02l4.52 4.65a.75.75 0 010 1.06l-4.52 4.65a.75.75 0 11-1.08-1.04L11.17 10 7.19 6.31a.75.75 0 01.02-1.08z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+
+      <div class="absolute bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2" data-slp-dots></div>
+    </div>
+  </div>
+
+  <!-- PASSPORT CTA -->
+  <div class="px-3 sm:px-4 md:px-6 pb-4 md:pb-6">
+    <div class="mt-3 rounded-2xl overflow-hidden border border-slate-200/70 bg-gradient-to-br from-[#05331F] via-[#05331F] to-[#005028] text-white">
+      <div class="p-4 sm:p-5 md:p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 md:gap-5">
+        <div class="min-w-0">
+          <div class="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 px-3 py-1 text-[11px] sm:text-xs font-extrabold tracking-wide">
+            <span class="inline-block w-2 h-2 rounded-full bg-[#005028]"></span>
+            PASSPORT ONLINE
+          </div>
+
+          <h3 class="mt-3 text-lg sm:text-xl md:text-2xl font-extrabold leading-snug">
+            YOU CAN NOW APPLY FOR YOUR PASSPORT
+          </h3>
+
+          <div class="mt-2 text-sm text-white/85">
+            Buy a voucher, apply online, then book biometrics.
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 w-full lg:w-auto slp-mobile-full">
+          <a
+            href="http://127.0.0.1:8000/passport/start"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center rounded-xl bg-white px-5 py-3 text-sm font-extrabold text-[#05331F] hover:bg-white/95"
+          >
+            Apply →
+          </a>
+
+          <a
+            href="http://127.0.0.1:8000/passport/voucher"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-extrabold text-white hover:bg-white/15"
+          >
+            Buy Voucher
+          </a>
+
+          <a
+            href="/faq"
+            class="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-extrabold text-white hover:bg-white/15"
+          >
+            FAQ
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PUBLIC SERVICES -->
+<section class="mt-6 md:mt-8">
+  <div class="slp-card slp-soft overflow-hidden">
+    <div class="px-4 sm:px-6 py-4 sm:py-5 bg-[#F7FAFF]">
+      <h2 class="text-base md:text-lg font-extrabold text-[#05331F]">Public Services</h2>
+      <p class="mt-1 text-sm text-slate-600">Quick access to key immigration services and official portals.</p>
+    </div>
+
+    <div class="p-4 sm:p-6 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" id="qaGrid">
+      {{#quick_actions}}
+        <a
+          href="{{href}}"
+          class="group rounded-2xl bg-white border border-slate-200/70 hover:border-slate-300 hover:shadow-sm transition p-4 h-full"
+          style="border-left: 6px solid {{accent}};"
+          data-icon="{{icon}}"
+          {{#external}}target="_blank" rel="noopener noreferrer"{{/external}}
+        >
+          <div class="flex items-start gap-3">
+            <div class="shrink-0 rounded-xl border border-slate-200/70 bg-[#F7FAFF] p-2" style="color: {{accent}};" data-qa-icon aria-hidden="true"></div>
+
+            <div class="min-w-0">
+              <div class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wide text-slate-500">{{title}}</div>
+              <div class="mt-1 text-lg sm:text-xl font-extrabold text-[#05331F]">{{value}}</div>
+              <div class="mt-1 text-sm text-slate-600">{{hint}}</div>
+              <div class="mt-3 text-sm font-extrabold text-[#005028] group-hover:underline">Open →</div>
+            </div>
+          </div>
+        </a>
+      {{/quick_actions}}
+    </div>
+  </div>
+</section>
+
+<!-- WELCOME MESSAGE -->
+<section id="welcome" class="mt-8 md:mt-10">
+  <div class="slp-card slp-soft overflow-hidden">
+    <div class="px-4 sm:px-6 py-4 sm:py-5 bg-[#F7FAFF]">
+      <h2 class="text-base md:text-lg font-extrabold text-[#05331F]">Welcome Message</h2>
+      <p class="mt-1 text-sm text-slate-600">Leadership statement and priorities for improved service delivery.</p>
+    </div>
+
+    <div class="p-4 sm:p-6 grid gap-5 sm:gap-6 grid-cols-1 lg:grid-cols-12 lg:items-stretch">
+      <div class="lg:col-span-4">
+        <div class="slp-card overflow-hidden h-full flex flex-col">
+          <img src="{{igp_image}}" alt="{{igp_title}}" class="w-full h-[320px] sm:h-[420px] md:h-[520px] object-cover" />
+          <div class="p-4">
+            <div class="text-sm font-extrabold text-[#05331F]">{{igp_name}}</div>
+            <div class="text-xs text-slate-600">{{igp_title}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-8">
+        <div class="slp-card p-4 sm:p-5 md:p-6 h-full flex flex-col">
+          <div class="flex flex-col sm:flex-row sm:flex-wrap items-start sm:justify-between gap-3">
+            <h3 class="text-lg md:text-xl font-extrabold text-[#05331F] leading-snug">{{welcome_title}}</h3>
+            <span class="inline-flex items-center rounded-full bg-[#005028]/10 px-3 py-1 text-[11px] sm:text-xs font-extrabold text-[#005028]">
+              Official Message
+            </span>
+          </div>
+
+          <div class="mt-4 space-y-4 text-sm md:text-base leading-7 text-slate-700">
+            {{#welcome_intro}}<p>{{text}}</p>{{/welcome_intro}}
+            {{#welcome_more}}<p>{{text}}</p>{{/welcome_more}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section id="news" class="mt-10 md:mt-12">
+  <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 sm:gap-6">
+    <div>
+      <span class="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider px-2 py-1 rounded bg-[#005028]/10 text-[#005028]">
+        What’s New
+      </span>
+      <h2 class="mt-3 text-2xl sm:text-3xl md:text-4xl font-semibold">{{articles_title}}</h2>
+      {{#articles_subtitle}}<p class="mt-2 text-sm md:text-base text-gray-600">{{articles_subtitle}}</p>{{/articles_subtitle}}
+    </div>
+
+    {{#articles_all_href}}
+      <a href="{{articles_all_href}}" class="text-[#005028] hover:underline font-semibold text-sm sm:text-base">{{articles_all_label}}</a>
+    {{/articles_all_href}}
+  </div>
+
+  <div class="mt-6 md:mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+    {{#articles}}
+      <article class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 hover:shadow-md hover:ring-gray-200 transition overflow-hidden">
+        <a href="{{href}}" class="block">
+          <div class="aspect-[4/3] bg-gray-100">
+            {{#image_url}}<img src="{{image_url}}" alt="{{title}}" class="w-full h-full object-cover" loading="lazy"/>{{/image_url}}
+            {{^image_url}}<div class="w-full h-full flex items-center justify-center text-gray-400">No image</div>{{/image_url}}
+          </div>
+
+          <div class="p-4 sm:p-5">
+            {{#date}}
+              <span class="inline-block text-[11px] sm:text-xs font-semibold uppercase tracking-wide px-2 py-1 rounded bg-[#005028]/10 text-[#005028]">
+                {{date}}
+              </span>
+            {{/date}}
+
+            <h3 class="mt-2 font-semibold leading-snug slp-clamp-2 text-sm sm:text-base">{{title}}</h3>
+
+            {{#excerpt}}<p class="mt-2 text-sm text-gray-600 slp-clamp-3">{{excerpt}}</p>{{/excerpt}}
+            <span class="mt-3 inline-flex items-center text-[#005028] font-semibold text-sm">Read more →</span>
+          </div>
+        </a>
+      </article>
+    {{/articles}}
+
+    {{^articles}}
+      <p class="text-gray-500">No articles returned.</p>
+    {{/articles}}
+  </div>
+</section>
+<!-- FEATURED PARTNERS -->
+<section id="partners" class="mt-8 md:mt-10">
+  <div class="slp-panel p-4 sm:p-5 md:p-6">
+    <div>
+      <div class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wide text-slate-500">Partnerships</div>
+      <h2 class="mt-1 text-xl sm:text-2xl md:text-3xl font-extrabold text-[#05331F]">Featured Partners</h2>
+      <p class="mt-2 text-sm text-slate-600">
+        Institutions we collaborate with to deliver secure and efficient immigration services.
+      </p>
+    </div>
+
+    <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+      <a href="https://www.moia.gov.sl" target="_blank" rel="noopener noreferrer"
+         class="rounded-2xl bg-white border border-slate-200/70 hover:border-slate-300 hover:shadow-sm transition p-4 flex items-center gap-3 min-h-[96px]">
+        <img src="/assets/partners/moia.png" alt="Ministry of Internal Affairs" class="h-12 w-12 object-contain shrink-0" />
+        <div class="min-w-0">
+          <div class="text-sm font-extrabold text-[#05331F]">Ministry of Internal Affairs</div>
+          <div class="text-xs text-slate-600">Supervising  Ministry</div>
+        </div>
+      </a>
+
+      <a href="#" target="_blank" rel="noopener noreferrer"
+         class="rounded-2xl bg-white border border-slate-200/70 hover:border-slate-300 hover:shadow-sm transition p-4 flex items-center gap-3 min-h-[96px]">
+        <img src="/assets/partners/mofaic.png" alt="Ministry of Foreign Affairs & International Cooperation" class="h-12 w-12 object-contain shrink-0" />
+        <div class="min-w-0">
+          <div class="text-sm font-extrabold text-[#05331F]">Ministry of Foreign Affairs</div>
+          <div class="text-xs text-slate-600">Government Partner</div>
+        </div>
+      </a>
+
+      <a href="https://www.iom.int/" target="_blank" rel="noopener noreferrer"
+         class="rounded-2xl bg-white border border-slate-200/70 hover:border-slate-300 hover:shadow-sm transition p-4 flex items-center gap-3 min-h-[96px]">
+        <img src="/assets/partners/iom.png" alt="IOM / UN Migration" class="h-12 w-12 object-contain shrink-0" />
+        <div class="min-w-0">
+          <div class="text-sm font-extrabold text-[#05331F]">IOM / UN Migration</div>
+          <div class="text-xs text-slate-600">International Partner</div>
+        </div>
+      </a>
+
+      <a href="https://www.nra.gov.sl" target="_blank" rel="noopener noreferrer"
+         class="rounded-2xl bg-white border border-slate-200/70 hover:border-slate-300 hover:shadow-sm transition p-4 flex items-center gap-3 min-h-[96px]">
+        <img src="/assets/partners/nra.png" alt="National Revenue Authority" class="h-12 w-12 object-contain shrink-0" />
+        <div class="min-w-0">
+          <div class="text-sm font-extrabold text-[#05331F]">National Revenue Authority</div>
+          <div class="text-xs text-slate-600">Revenue Partner</div>
+        </div>
+      </a>
+
+      <a href="https://ncra.gov.sl/" target="_blank" rel="noopener noreferrer"
+         class="rounded-2xl bg-white border border-slate-200/70 hover:border-slate-300 hover:shadow-sm transition p-4 flex items-center gap-3 min-h-[96px]">
+        <img src="/assets/partners/ncra.png" alt="National Civil Registration Authority" class="h-12 w-12 object-contain shrink-0" />
+        <div class="min-w-0">
+          <div class="text-sm font-extrabold text-[#05331F]">National Civil Registration Authority</div>
+          <div class="text-xs text-slate-600">Identity Partner</div>
+        </div>
+      </a>
+
+      <a href="https://police.gov.sl/" target="_blank" rel="noopener noreferrer"
+         class="rounded-2xl bg-white border border-slate-200/70 hover:border-slate-300 hover:shadow-sm transition p-4 flex items-center gap-3 min-h-[96px]">
+        <img src="/assets/partners/slp.png" alt="Sierra Leone Police" class="h-12 w-12 object-contain shrink-0" />
+        <div class="min-w-0">
+          <div class="text-sm font-extrabold text-[#05331F]">Sierra Leone Police</div>
+          <div class="text-xs text-slate-600">Security Partner</div>
+        </div>
+      </a>
+
+      <a href="#" target="_blank" rel="noopener noreferrer"
+         class="rounded-2xl bg-white border border-slate-200/70 hover:border-slate-300 hover:shadow-sm transition p-4 flex items-center gap-3 min-h-[96px]">
+        <img src="/assets/partners/ons.png" alt="Office of National Security" class="h-12 w-12 object-contain shrink-0" />
+        <div class="min-w-0">
+          <div class="text-sm font-extrabold text-[#05331F]">Office of National Security</div>
+          <div class="text-xs text-slate-600">National Security</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- HELP & SUPPORT -->
+<section id="help" class="mt-8 md:mt-10 mb-10">
+  <div class="slp-card slp-soft overflow-hidden">
+    <div class="px-4 sm:px-6 py-4 sm:py-5 bg-[#F7FAFF]">
+      <h2 class="text-base md:text-lg font-extrabold text-[#05331F]">Help & Headquarters</h2>
+      <p class="mt-1 text-sm text-slate-600">Self-service help and official public contact information.</p>
+    </div>
+
+    <div class="p-4 sm:p-6 grid gap-6 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <div class="slp-panel p-4 sm:p-5">
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div>
+              <div class="text-sm font-extrabold text-[#05331F]">Frequently Asked Questions</div>
+              <p class="mt-1 text-sm text-slate-700">
+                Start here. Most passport, visa and permit questions are answered in the FAQ.
+              </p>
+            </div>
+
+            <a
+              href="/faq"
+              class="shrink-0 inline-flex items-center justify-center rounded-xl bg-[#005028] px-4 py-2 text-sm font-extrabold text-white hover:bg-[#05331F] w-full sm:w-auto"
+            >
+              Open FAQ →
+            </a>
+          </div>
+
+          <div class="mt-4 grid gap-3 grid-cols-1 sm:grid-cols-2">
+            <a href="/faq#passport" class="rounded-xl border border-slate-200/70 bg-white p-4 hover:bg-slate-50 transition">
+              <div class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wide text-slate-500">Passport</div>
+              <div class="mt-1 text-sm font-extrabold text-[#05331F]">Voucher, requirements & biometrics</div>
+              <div class="mt-2 text-sm text-slate-600">How to buy voucher and start application.</div>
+            </a>
+
+            <a href="/faq#visa" class="rounded-xl border border-slate-200/70 bg-white p-4 hover:bg-slate-50 transition">
+              <div class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wide text-slate-500">Visa</div>
+              <div class="mt-1 text-sm font-extrabold text-[#05331F]">eVisa process & timelines</div>
+              <div class="mt-2 text-sm text-slate-600">Common questions on online visa applications.</div>
+            </a>
+
+            <a href="/faq#permits" class="rounded-xl border border-slate-200/70 bg-white p-4 hover:bg-slate-50 transition">
+              <div class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wide text-slate-500">Permits</div>
+              <div class="mt-1 text-sm font-extrabold text-[#05331F]">Work & residence permits</div>
+              <div class="mt-2 text-sm text-slate-600">Unified portal guidance and required documents.</div>
+            </a>
+
+            <a href="/report" class="rounded-xl border border-slate-200/70 bg-white p-4 hover:bg-slate-50 transition">
+              <div class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wide text-slate-500">Report</div>
+              <div class="mt-1 text-sm font-extrabold text-[#05331F]">Report an issue</div>
+              <div class="mt-2 text-sm text-slate-600">For complaints, feedback and verified reports.</div>
+            </a>
+          </div>
+
+          <div class="mt-4 flex flex-col sm:flex-row flex-wrap gap-3 slp-mobile-full">
+            <a
+              href="http://127.0.0.1:8000/passport/start"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-extrabold text-[#05331F] hover:bg-slate-50"
+            >
+              Apply Passport →
+            </a>
+
+            <a
+              href="http://127.0.0.1:8000/passport/voucher"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-extrabold text-[#05331F] hover:bg-slate-50"
+            >
+              Buy Voucher →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5">
+        <div class="slp-card p-4 sm:p-5">
+          <div class="text-sm font-extrabold text-[#05331F]">Headquarters</div>
+          <p class="mt-1 text-sm text-slate-600">Official public contact information.</p>
+
+          <div class="mt-4 slp-panel p-4">
+            <div class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wide text-slate-500">Address</div>
+            <div class="mt-1 text-sm font-extrabold text-[#05331F]">
+              14 Gloucester Street, Freetown
+            </div>
+
+            <div class="mt-3 text-[11px] sm:text-xs font-extrabold uppercase tracking-wide text-slate-500">Telephone</div>
+            <div class="mt-1 text-sm font-extrabold text-[#05331F] break-words">+232-22-223034</div>
+            <div class="mt-1 text-sm font-extrabold text-[#05331F] break-words">+232-22-225081</div>
+
+            <div class="mt-4 pt-4 border-t border-slate-200/70">
+              <div class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wide text-slate-500">Emergency Hotline</div>
+              <div class="mt-1 text-sm font-extrabold text-[#05331F] break-words">{{emergency_number}}</div>
+            </div>
+          </div>
+
+          <div class="mt-4 grid gap-3">
+            <a href="{{webmail_url}}" target="_blank" rel="noopener noreferrer"
+               class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-extrabold text-[#05331F] hover:bg-slate-50 text-center">
+              Webmail →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Back to top -->
+<a
+  id="backToTop"
+  href="#"
+  class="slp-top fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 inline-flex items-center justify-center rounded-full bg-[#05331F] text-white shadow-lg w-11 h-11 sm:w-12 sm:h-12 hover:bg-[#005028] focus:outline-none focus:ring-4 focus:ring-[#005028]/30"
+  aria-label="Back to top"
+>
+  <svg class="h-5 w-5 sm:h-6 sm:w-6" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+    <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l5 5a1 1 0 0 1-1.414 1.414L11 6.414V16a1 1 0 11-2 0V6.414L5.707 9.707A1 1 0 014.293 8.293l5-5A1 1 0 0110 3z" clip-rule="evenodd"/>
+  </svg>
+</a>
+
+<script>
+  (() => {
+    const prefersReducedMotion =
+      window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Public Services icons
+    const iconSvgs = {
+      passport: `
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 2h8l4 4v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 2v4h4"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a3 3 0 1 0 6 0a3 3 0 0 0-6 0Z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 13.5h8M8 17h8"/>
+        </svg>`,
+      visa: `
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3H4V6Z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 9h18v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9Z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 14h6M7 17h9"/>
+        </svg>`,
+      permit: `
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 2h6v2h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h3V2Z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11h8M8 15h8M8 19h5"/>
+        </svg>`,
+      report: `
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6M9 16h6M10 2h4l2 2h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h3l2-2Z"/>
+        </svg>`,
+      faq: `
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.5 9a2.5 2.5 0 1 1 3.9 2.1c-.8.5-1.4 1.1-1.4 2v.4"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17h.01"/>
+        </svg>`
+    };
+
+    document.querySelectorAll("#qaGrid a[data-icon]").forEach((card) => {
+      const icon = String(card.getAttribute("data-icon") || "").trim();
+      const iconWrap = card.querySelector("[data-qa-icon]");
+      if (iconWrap) iconWrap.innerHTML = iconSvgs[icon] || iconSvgs.passport;
+    });
+
+    // Hero slider
+    const root = document.getElementById("heroSlider");
+    if (root) {
+      const slides = Array.from(root.querySelectorAll("[data-slp-slide]"));
+      const dotsWrap = root.querySelector("[data-slp-dots]");
+      const prev = root.querySelector("[data-slp-prev]");
+      const next = root.querySelector("[data-slp-next]");
+
+      if (slides.length && dotsWrap && prev && next) {
+        let idx = 0;
+        let timer = null;
+
+        const dots = slides.map((_, i) => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "slp-dot";
+          b.setAttribute("aria-label", `Go to slide ${i + 1}`);
+          b.addEventListener("click", () => { setActive(i); start(); });
+          dotsWrap.appendChild(b);
+          return b;
+        });
+
+        const setActive = (i) => {
+          idx = (i + slides.length) % slides.length;
+          slides.forEach((s, si) => s.classList.toggle("is-active", si === idx));
+          dots.forEach((d, di) => d.classList.toggle("is-active", di === idx));
+        };
+
+        const start = () => {
+          stop();
+          if (prefersReducedMotion) return;
+          timer = window.setInterval(() => setActive(idx + 1), 6500);
+        };
+
+        const stop = () => {
+          if (timer) window.clearInterval(timer);
+          timer = null;
+        };
+
+        prev.addEventListener("click", () => { setActive(idx - 1); start(); });
+        next.addEventListener("click", () => { setActive(idx + 1); start(); });
+
+        root.addEventListener("mouseenter", stop);
+        root.addEventListener("mouseleave", start);
+
+        setActive(0);
+        if (!prefersReducedMotion) start();
+      }
+    }
+
+    // Back-to-top
+    const topBtn = document.getElementById("backToTop");
+    if (topBtn) {
+      const toggle = () => topBtn.classList.toggle("is-visible", window.scrollY > 450);
+      toggle();
+      window.addEventListener("scroll", toggle, { passive: true });
+      topBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+  })();
+</script>
