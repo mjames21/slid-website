@@ -185,7 +185,7 @@ final class HomeController extends BaseController
             'hero_slides' => [
                 [
                     'kicker' => 'Passport Applications',
-                    'title'  => 'Passport Applications — Buy Voucher, Apply Online, Book Biometrics',
+                    'title'  => 'Passport Applications — Apply Online, Book Biometrics',
                     'text'   => 'Buy a voucher, complete your application online, then book biometrics for passport issuance and renewal.',
                     'image'  => '/assets/hero-2.jpg',
                     'cta1_label' => 'Buy Voucher (Passport)',
