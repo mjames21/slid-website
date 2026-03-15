@@ -6,37 +6,64 @@ FILE: resources/views/home.html
   /* =========================
      Core look
      ========================= */
-  .slp-card { background:#fff; border:1px solid rgba(15,23,42,.10); border-radius:16px; }
-  .slp-soft { box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06); }
-  .slp-panel { background:#F7FAFF; border:1px solid rgba(15,23,42,.10); border-radius:16px; }
+  .slid-card { background:#fff; border:1px solid rgba(15,23,42,.10); border-radius:16px; }
+  .slid-soft { box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06); }
+  .slid-panel { background:#F7FAFF; border:1px solid rgba(15,23,42,.10); border-radius:16px; }
 
   /* =========================
-     Slider
+     Slider (desktop only; mobile disabled)
      ========================= */
-  .slp-slide { opacity: 0; transition: opacity 500ms ease; }
-  .slp-slide.is-active { opacity: 1; }
-  .slp-dot{
+  .slid-slide{
+    opacity: 0;
+    transition: opacity 320ms ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .slid-slide.is-active{
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+  }
+  .slid-dot{
     width:10px;
     height:10px;
     border-radius:9999px;
     background:rgba(255,255,255,.35);
     border:1px solid rgba(255,255,255,.20);
   }
-  .slp-dot.is-active{ background:#005028; }
+  .slid-dot.is-active{ background:#005028; }
+
+  /* ✅ Disable slider entirely on mobile: only first slide visible; controls hidden */
+  @media (max-width: 639px) {
+    #heroSlider [data-slid-prev],
+    #heroSlider [data-slid-next],
+    #heroSlider [data-slid-dots]{
+      display: none !important;
+    }
+    #heroSlider [data-slid-slide]{
+      display: none !important;
+    }
+    #heroSlider [data-slid-slide]:first-of-type{
+      display: block !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      z-index: 1 !important;
+    }
+  }
 
   /* =========================
      Back-to-top
      ========================= */
-  .slp-top{ opacity:0; pointer-events:none; transform:translateY(8px); transition:200ms ease; }
-  .slp-top.is-visible{ opacity:1; pointer-events:auto; transform:translateY(0); }
+  .slid-top{ opacity:0; pointer-events:none; transform:translateY(8px); transition:200ms ease; }
+  .slid-top.is-visible{ opacity:1; pointer-events:auto; transform:translateY(0); }
 
   /* =========================
      Clamp
      ========================= */
-  .slp-clamp-2{
+  .slid-clamp-2{
     display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden;
   }
-  .slp-clamp-3{
+  .slid-clamp-3{
     display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden;
   }
 
@@ -44,23 +71,25 @@ FILE: resources/views/home.html
      Mobile niceties
      ========================= */
   @media (max-width: 639px) {
-    .slp-mobile-full > *{
+    .slid-mobile-full > *{
       width:100%;
     }
   }
 </style>
 
 <!-- HERO -->
+<!-- HERO (fix prev button overlap) -->
 <section class="mt-4 md:mt-6">
-  <div class="slp-card slp-soft overflow-hidden">
+  <div class="slid-card slid-soft overflow-hidden">
     <div id="heroSlider" class="relative h-[300px] sm:h-[360px] md:h-[480px] overflow-hidden">
       {{#hero_slides}}
-        <div class="slp-slide absolute inset-0" data-slp-slide>
+        <div class="slid-slide absolute inset-0" data-slid-slide>
           <img src="{{image}}" alt="{{title}}" class="h-full w-full object-cover" />
           <div class="absolute inset-0 bg-gradient-to-r from-[#05331F]/95 via-[#05331F]/65 to-[#05331F]/20"></div>
 
           <div class="absolute inset-0">
-            <div class="h-full flex items-center px-4 sm:px-6 md:px-10">
+            <!-- ✅ more LEFT padding so arrows never cover text -->
+            <div class="h-full flex items-center pl-12 pr-4 sm:pl-16 sm:pr-6 md:pl-20 md:pr-10">
               <div class="max-w-2xl text-white">
                 <h1 class="text-2xl sm:text-3xl md:text-5xl font-extrabold leading-tight">
                   {{title}}
@@ -70,7 +99,7 @@ FILE: resources/views/home.html
                   {{text}}
                 </p>
 
-                <div class="mt-5 md:mt-6 flex flex-col sm:flex-row flex-wrap gap-3 slp-mobile-full">
+                <div class="mt-5 md:mt-6 flex flex-col sm:flex-row flex-wrap gap-3 slid-mobile-full">
                   <a href="{{cta1_href}}" class="inline-flex items-center justify-center rounded-xl bg-[#005028] px-5 py-3 text-sm font-extrabold text-white hover:bg-[#05331F]">
                     {{cta1_label}}
                   </a>
@@ -84,23 +113,30 @@ FILE: resources/views/home.html
         </div>
       {{/hero_slides}}
 
-      <button type="button" data-slp-prev class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 rounded-xl border border-white/20 bg-white/10 p-2.5 sm:p-3 text-white hover:bg-white/20" aria-label="Previous slide">
-        <svg class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <!-- ✅ slightly smaller arrows -->
+      <button type="button"
+              data-slid-prev
+              class="z-30 absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 rounded-xl border border-white/25 bg-[#05331F]/45 backdrop-blur-sm p-2 text-white hover:bg-[#05331F]/65"
+              aria-label="Previous slide">
+        <svg class="h-4 w-4 sm:h-4 sm:w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
           <path fill-rule="evenodd" d="M12.79 15.77a.75.75 0 01-1.06-.02L7.21 11.1a.75.75 0 010-1.06l4.52-4.65a.75.75 0 111.08 1.04L8.83 10l3.98 3.69a.75.75 0 01-.02 1.08z" clip-rule="evenodd"/>
         </svg>
       </button>
 
-      <button type="button" data-slp-next class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 rounded-xl border border-white/20 bg-white/10 p-2.5 sm:p-3 text-white hover:bg-white/20" aria-label="Next slide">
-        <svg class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+      <button type="button"
+              data-slid-next
+              class="z-30 absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 rounded-xl border border-white/25 bg-[#05331F]/45 backdrop-blur-sm p-2 text-white hover:bg-[#05331F]/65"
+              aria-label="Next slide">
+        <svg class="h-4 w-4 sm:h-4 sm:w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
           <path fill-rule="evenodd" d="M7.21 4.23a.75.75 0 011.06.02l4.52 4.65a.75.75 0 010 1.06l-4.52 4.65a.75.75 0 11-1.08-1.04L11.17 10 7.19 6.31a.75.75 0 01.02-1.08z" clip-rule="evenodd"/>
         </svg>
       </button>
 
-      <div class="absolute bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2" data-slp-dots></div>
+      <div class="z-30 absolute bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 flex items-center gap-2" data-slid-dots></div>
     </div>
   </div>
 
-  <!-- PASSPORT CTA -->
+  <!-- PASSPORT CTA (unchanged) -->
   <div class="px-3 sm:px-4 md:px-6 pb-4 md:pb-6">
     <div class="mt-3 rounded-2xl overflow-hidden border border-slate-200/70 bg-gradient-to-br from-[#05331F] via-[#05331F] to-[#005028] text-white">
       <div class="p-4 sm:p-5 md:p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 md:gap-5">
@@ -119,29 +155,23 @@ FILE: resources/views/home.html
           </div>
         </div>
 
-        <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 w-full lg:w-auto slp-mobile-full">
-          <a
-            href="http://127.0.0.1:8000/passport/start"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center justify-center rounded-xl bg-white px-5 py-3 text-sm font-extrabold text-[#05331F] hover:bg-white/95"
-          >
+        <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 w-full lg:w-auto slid-mobile-full">
+          <a href="{{passport_start_url}}"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="inline-flex items-center justify-center rounded-xl bg-white px-5 py-3 text-sm font-extrabold text-[#05331F] hover:bg-white/95">
             Apply →
           </a>
 
-          <a
-            href="http://127.0.0.1:8000/passport/voucher"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-extrabold text-white hover:bg-white/15"
-          >
+          <a href="{{passport_voucher_url}}"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-extrabold text-white hover:bg-white/15">
             Buy Voucher
           </a>
 
-          <a
-            href="/faq"
-            class="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-extrabold text-white hover:bg-white/15"
-          >
+          <a href="/faq"
+             class="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-extrabold text-white hover:bg-white/15">
             FAQ
           </a>
         </div>
@@ -149,10 +179,9 @@ FILE: resources/views/home.html
     </div>
   </div>
 </section>
-
 <!-- PUBLIC SERVICES -->
 <section class="mt-6 md:mt-8">
-  <div class="slp-card slp-soft overflow-hidden">
+  <div class="slid-card slid-soft overflow-hidden">
     <div class="px-4 sm:px-6 py-4 sm:py-5 bg-[#F7FAFF]">
       <h2 class="text-base md:text-lg font-extrabold text-[#05331F]">Public Services</h2>
       <p class="mt-1 text-sm text-slate-600">Quick access to key immigration services and official portals.</p>
@@ -160,13 +189,11 @@ FILE: resources/views/home.html
 
     <div class="p-4 sm:p-6 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" id="qaGrid">
       {{#quick_actions}}
-        <a
-          href="{{href}}"
-          class="group rounded-2xl bg-white border border-slate-200/70 hover:border-slate-300 hover:shadow-sm transition p-4 h-full"
-          style="border-left: 6px solid {{accent}};"
-          data-icon="{{icon}}"
-          {{#external}}target="_blank" rel="noopener noreferrer"{{/external}}
-        >
+        <a href="{{href}}"
+           class="group rounded-2xl bg-white border border-slate-200/70 hover:border-slate-300 hover:shadow-sm transition p-4 h-full"
+           style="border-left: 6px solid {{accent}};"
+           data-icon="{{icon}}"
+           {{#external}}target="_blank" rel="noopener noreferrer"{{/external}}>
           <div class="flex items-start gap-3">
             <div class="shrink-0 rounded-xl border border-slate-200/70 bg-[#F7FAFF] p-2" style="color: {{accent}};" data-qa-icon aria-hidden="true"></div>
 
@@ -185,7 +212,7 @@ FILE: resources/views/home.html
 
 <!-- WELCOME MESSAGE -->
 <section id="welcome" class="mt-8 md:mt-10">
-  <div class="slp-card slp-soft overflow-hidden">
+  <div class="slid-card slid-soft overflow-hidden">
     <div class="px-4 sm:px-6 py-4 sm:py-5 bg-[#F7FAFF]">
       <h2 class="text-base md:text-lg font-extrabold text-[#05331F]">Welcome Message</h2>
       <p class="mt-1 text-sm text-slate-600">Leadership statement and priorities for improved service delivery.</p>
@@ -193,17 +220,17 @@ FILE: resources/views/home.html
 
     <div class="p-4 sm:p-6 grid gap-5 sm:gap-6 grid-cols-1 lg:grid-cols-12 lg:items-stretch">
       <div class="lg:col-span-4">
-        <div class="slp-card overflow-hidden h-full flex flex-col">
-          <img src="{{igp_image}}" alt="{{igp_title}}" class="w-full h-[320px] sm:h-[420px] md:h-[520px] object-cover" />
+        <div class="slid-card overflow-hidden h-full flex flex-col">
+          <img src="{{cio_image}}" alt="{{cio_title}}" class="w-full h-[320px] sm:h-[420px] md:h-[520px] object-cover" />
           <div class="p-4">
-            <div class="text-sm font-extrabold text-[#05331F]">{{igp_name}}</div>
-            <div class="text-xs text-slate-600">{{igp_title}}</div>
+            <div class="text-sm font-extrabold text-[#05331F]">{{cio_name}}</div>
+            <div class="text-xs text-slate-600">{{cio_title}}</div>
           </div>
         </div>
       </div>
 
       <div class="lg:col-span-8">
-        <div class="slp-card p-4 sm:p-5 md:p-6 h-full flex flex-col">
+        <div class="slid-card p-4 sm:p-5 md:p-6 h-full flex flex-col">
           <div class="flex flex-col sm:flex-row sm:flex-wrap items-start sm:justify-between gap-3">
             <h3 class="text-lg md:text-xl font-extrabold text-[#05331F] leading-snug">{{welcome_title}}</h3>
             <span class="inline-flex items-center rounded-full bg-[#005028]/10 px-3 py-1 text-[11px] sm:text-xs font-extrabold text-[#005028]">
@@ -253,9 +280,9 @@ FILE: resources/views/home.html
               </span>
             {{/date}}
 
-            <h3 class="mt-2 font-semibold leading-snug slp-clamp-2 text-sm sm:text-base">{{title}}</h3>
+            <h3 class="mt-2 font-semibold leading-snug slid-clamp-2 text-sm sm:text-base">{{title}}</h3>
 
-            {{#excerpt}}<p class="mt-2 text-sm text-gray-600 slp-clamp-3">{{excerpt}}</p>{{/excerpt}}
+            {{#excerpt}}<p class="mt-2 text-sm text-gray-600 slid-clamp-3">{{excerpt}}</p>{{/excerpt}}
             <span class="mt-3 inline-flex items-center text-[#005028] font-semibold text-sm">Read more →</span>
           </div>
         </a>
@@ -267,9 +294,10 @@ FILE: resources/views/home.html
     {{/articles}}
   </div>
 </section>
+
 <!-- FEATURED PARTNERS -->
 <section id="partners" class="mt-8 md:mt-10">
-  <div class="slp-panel p-4 sm:p-5 md:p-6">
+  <div class="slid-panel p-4 sm:p-5 md:p-6">
     <div>
       <div class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wide text-slate-500">Partnerships</div>
       <h2 class="mt-1 text-xl sm:text-2xl md:text-3xl font-extrabold text-[#05331F]">Featured Partners</h2>
@@ -284,7 +312,7 @@ FILE: resources/views/home.html
         <img src="/assets/partners/moia.png" alt="Ministry of Internal Affairs" class="h-12 w-12 object-contain shrink-0" />
         <div class="min-w-0">
           <div class="text-sm font-extrabold text-[#05331F]">Ministry of Internal Affairs</div>
-          <div class="text-xs text-slate-600">Supervising  Ministry</div>
+          <div class="text-xs text-slate-600">Supervising Ministry</div>
         </div>
       </a>
 
@@ -347,7 +375,7 @@ FILE: resources/views/home.html
 
 <!-- HELP & SUPPORT -->
 <section id="help" class="mt-8 md:mt-10 mb-10">
-  <div class="slp-card slp-soft overflow-hidden">
+  <div class="slid-card slid-soft overflow-hidden">
     <div class="px-4 sm:px-6 py-4 sm:py-5 bg-[#F7FAFF]">
       <h2 class="text-base md:text-lg font-extrabold text-[#05331F]">Help & Headquarters</h2>
       <p class="mt-1 text-sm text-slate-600">Self-service help and official public contact information.</p>
@@ -355,7 +383,7 @@ FILE: resources/views/home.html
 
     <div class="p-4 sm:p-6 grid gap-6 lg:grid-cols-12">
       <div class="lg:col-span-7">
-        <div class="slp-panel p-4 sm:p-5">
+        <div class="slid-panel p-4 sm:p-5">
           <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div>
               <div class="text-sm font-extrabold text-[#05331F]">Frequently Asked Questions</div>
@@ -364,10 +392,8 @@ FILE: resources/views/home.html
               </p>
             </div>
 
-            <a
-              href="/faq"
-              class="shrink-0 inline-flex items-center justify-center rounded-xl bg-[#005028] px-4 py-2 text-sm font-extrabold text-white hover:bg-[#05331F] w-full sm:w-auto"
-            >
+            <a href="/faq"
+               class="shrink-0 inline-flex items-center justify-center rounded-xl bg-[#005028] px-4 py-2 text-sm font-extrabold text-white hover:bg-[#05331F] w-full sm:w-auto">
               Open FAQ →
             </a>
           </div>
@@ -398,22 +424,18 @@ FILE: resources/views/home.html
             </a>
           </div>
 
-          <div class="mt-4 flex flex-col sm:flex-row flex-wrap gap-3 slp-mobile-full">
-            <a
-              href="http://127.0.0.1:8000/passport/start"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-extrabold text-[#05331F] hover:bg-slate-50"
-            >
+          <div class="mt-4 flex flex-col sm:flex-row flex-wrap gap-3 slid-mobile-full">
+            <a href="{{passport_start_url}}"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-extrabold text-[#05331F] hover:bg-slate-50">
               Apply Passport →
             </a>
 
-            <a
-              href="http://127.0.0.1:8000/passport/voucher"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-extrabold text-[#05331F] hover:bg-slate-50"
-            >
+            <a href="{{passport_voucher_url}}"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-extrabold text-[#05331F] hover:bg-slate-50">
               Buy Voucher →
             </a>
           </div>
@@ -421,11 +443,11 @@ FILE: resources/views/home.html
       </div>
 
       <div class="lg:col-span-5">
-        <div class="slp-card p-4 sm:p-5">
+        <div class="slid-card p-4 sm:p-5">
           <div class="text-sm font-extrabold text-[#05331F]">Headquarters</div>
           <p class="mt-1 text-sm text-slate-600">Official public contact information.</p>
 
-          <div class="mt-4 slp-panel p-4">
+          <div class="mt-4 slid-panel p-4">
             <div class="text-[11px] sm:text-xs font-extrabold uppercase tracking-wide text-slate-500">Address</div>
             <div class="mt-1 text-sm font-extrabold text-[#05331F]">
               14 Gloucester Street, Freetown
@@ -454,12 +476,10 @@ FILE: resources/views/home.html
 </section>
 
 <!-- Back to top -->
-<a
-  id="backToTop"
-  href="#"
-  class="slp-top fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 inline-flex items-center justify-center rounded-full bg-[#05331F] text-white shadow-lg w-11 h-11 sm:w-12 sm:h-12 hover:bg-[#005028] focus:outline-none focus:ring-4 focus:ring-[#005028]/30"
-  aria-label="Back to top"
->
+<a id="backToTop"
+   href="#"
+   class="slid-top fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 inline-flex items-center justify-center rounded-full bg-[#05331F] text-white shadow-lg w-11 h-11 sm:w-12 sm:h-12 hover:bg-[#005028] focus:outline-none focus:ring-4 focus:ring-[#005028]/30"
+   aria-label="Back to top">
   <svg class="h-5 w-5 sm:h-6 sm:w-6" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
     <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l5 5a1 1 0 0 1-1.414 1.414L11 6.414V16a1 1 0 11-2 0V6.414L5.707 9.707A1 1 0 014.293 8.293l5-5A1 1 0 0110 3z" clip-rule="evenodd"/>
   </svg>
@@ -508,53 +528,65 @@ FILE: resources/views/home.html
       if (iconWrap) iconWrap.innerHTML = iconSvgs[icon] || iconSvgs.passport;
     });
 
-    // Hero slider
+    // Hero slider: desktop only (mobile disabled via CSS)
     const root = document.getElementById("heroSlider");
     if (root) {
-      const slides = Array.from(root.querySelectorAll("[data-slp-slide]"));
-      const dotsWrap = root.querySelector("[data-slp-dots]");
-      const prev = root.querySelector("[data-slp-prev]");
-      const next = root.querySelector("[data-slp-next]");
+      const isMobile = window.matchMedia && window.matchMedia("(max-width: 639px)").matches;
+
+      const slides = Array.from(root.querySelectorAll("[data-slid-slide]"));
+      const dotsWrap = root.querySelector("[data-slid-dots]");
+      const prev = root.querySelector("[data-slid-prev]");
+      const next = root.querySelector("[data-slid-next]");
 
       if (slides.length && dotsWrap && prev && next) {
-        let idx = 0;
-        let timer = null;
+        if (isMobile) {
+          slides.forEach((s, i) => s.classList.toggle("is-active", i === 0));
+        } else {
+          const SLIDE_INTERVAL_MS = 4200;
+          let idx = 0;
+          let timer = null;
 
-        const dots = slides.map((_, i) => {
-          const b = document.createElement("button");
-          b.type = "button";
-          b.className = "slp-dot";
-          b.setAttribute("aria-label", `Go to slide ${i + 1}`);
-          b.addEventListener("click", () => { setActive(i); start(); });
-          dotsWrap.appendChild(b);
-          return b;
-        });
+          const dots = slides.map((_, i) => {
+            const b = document.createElement("button");
+            b.type = "button";
+            b.className = "slid-dot";
+            b.setAttribute("aria-label", `Go to slide ${i + 1}`);
+            b.addEventListener("click", () => { setActive(i); start(); });
+            dotsWrap.appendChild(b);
+            return b;
+          });
 
-        const setActive = (i) => {
-          idx = (i + slides.length) % slides.length;
-          slides.forEach((s, si) => s.classList.toggle("is-active", si === idx));
-          dots.forEach((d, di) => d.classList.toggle("is-active", di === idx));
-        };
+          const setActive = (i) => {
+            idx = (i + slides.length) % slides.length;
+            slides.forEach((s, si) => s.classList.toggle("is-active", si === idx));
+            dots.forEach((d, di) => d.classList.toggle("is-active", di === idx));
+          };
 
-        const start = () => {
-          stop();
-          if (prefersReducedMotion) return;
-          timer = window.setInterval(() => setActive(idx + 1), 6500);
-        };
+          const stop = () => {
+            if (timer) window.clearInterval(timer);
+            timer = null;
+          };
 
-        const stop = () => {
-          if (timer) window.clearInterval(timer);
-          timer = null;
-        };
+          const start = () => {
+            stop();
+            if (prefersReducedMotion) return;
+            timer = window.setInterval(() => setActive(idx + 1), SLIDE_INTERVAL_MS);
+          };
 
-        prev.addEventListener("click", () => { setActive(idx - 1); start(); });
-        next.addEventListener("click", () => { setActive(idx + 1); start(); });
+          prev.addEventListener("click", () => { setActive(idx - 1); start(); });
+          next.addEventListener("click", () => { setActive(idx + 1); start(); });
 
-        root.addEventListener("mouseenter", stop);
-        root.addEventListener("mouseleave", start);
+          root.addEventListener("mouseenter", stop);
+          root.addEventListener("mouseleave", start);
 
-        setActive(0);
-        if (!prefersReducedMotion) start();
+          document.addEventListener("visibilitychange", () => {
+            if (document.hidden) stop();
+            else start();
+          });
+
+          setActive(0);
+          start();
+        }
       }
     }
 

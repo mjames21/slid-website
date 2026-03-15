@@ -48,6 +48,17 @@ FILE: resources/views/layout.html
           -webkit-overflow-scrolling: touch;
         }
       }
+        .slid-slide{
+    opacity: 0;
+    transition: opacity 500ms ease;
+    pointer-events: none; /* ✅ key fix */
+    z-index: 0;
+  }
+  .slid-slide.is-active{
+    opacity: 1;
+    pointer-events: auto; /* ✅ clickable only when active */
+    z-index: 1;
+  }
     </style>
   </head>
 
